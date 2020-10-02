@@ -39,7 +39,7 @@
             "name": "Windows",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/APGameEngine.exe",
+            "program": "${workspaceFolder}/bin/pa2-proy2-johncarlo-jeremy-pac.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
