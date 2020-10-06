@@ -3,6 +3,8 @@
 #include "Dot.h"
 #include "BigDot.h"
 
+#include "Ghost.h"
+
 Player::Player(int x, int y, int width, int height, EntityManager* em) : Entity(x, y, width, height){
     sprite.load("images/pacman.png");
     down.cropFrom(sprite, 0, 48, 16, 16);
@@ -95,15 +97,20 @@ void Player::keyPressed(int key){
             break;
         case 'n':
             if (this->health > 0)
-{
-             this->health--;
-}
+            {
+                this->health--;
+            }
             break;
         case 'm':
-             if (this->health < MAXhealth)
-        {
-             this->health++;
-        }
+            if (this->health < MAXhealth)
+            {
+                this->health++;
+            }
+            break;
+        case 'g':
+            ofImage  newImage("images/Background.png");
+            Entity* newGhost = new Ghost(504, 368, 16,16, newImage);
+            em->entities.push_back(newGhost);
             break;
     }
 }
