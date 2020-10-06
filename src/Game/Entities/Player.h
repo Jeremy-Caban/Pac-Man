@@ -13,10 +13,10 @@ enum FACING {
 class Player: public Entity{
 
     private:
-        int health;
+        int health = 3;
         int score;
         bool canMove;
-        int speed = 8;
+        int speed = 4;
         bool walking = false;
         FACING facing = DOWN;
         ofImage up, down, left, right;
@@ -35,6 +35,7 @@ class Player: public Entity{
         void keyPressed(int);
         void keyReleased(int);
         void damage(Entity* damageSource);
+        void die();
         void mousePressed(int, int, int);
         void reset();
         void setFacing(FACING facing);

@@ -30,15 +30,18 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	if (currentState != nullptr)
+	if (currentState != nullptr){
 		currentState->render();
+	}
+	//   ofSetColor(230);
+	//   ofDrawBitmapString("Lives: " + this->*health , 30, 20);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if (currentState != nullptr)
+	if (currentState != nullptr){
 		currentState->keyPressed(key);
-
+	}
 }
 
 //--------------------------------------------------------------

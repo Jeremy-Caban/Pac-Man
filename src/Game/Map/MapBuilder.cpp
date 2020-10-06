@@ -2,6 +2,7 @@
 
 
 MapBuilder::MapBuilder(){
+	
 	entityManager = new EntityManager();
 	pixelMultiplier = 16;
 	boundBlock = ofColor(0,0,0);

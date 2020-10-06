@@ -8,12 +8,13 @@ void Map::tick(){
 	entityManager->tick();
 	player->tick();
 
+
 }
 void Map::render(){
     ofSetBackgroundColor(0, 0, 0);
 	entityManager->render();
 	player->render();
-
+	
 }
 
 void Map::keyPressed(int key){

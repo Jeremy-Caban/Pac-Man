@@ -15,7 +15,7 @@ void EntityManager::tick(){
     }
     for(unsigned int removable: toRemove){
         entities.erase(entities.begin() + removable);
-    }
+    } 
 }
 
 void EntityManager::render(){

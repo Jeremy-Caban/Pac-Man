@@ -4,6 +4,8 @@
 GameState::GameState() {
 	mapImage.load("images/map1.png");
 	map = MapBuilder().createMap(mapImage);
+	// ofSetColor(230);
+	//     ofDrawBitmapString("Lives: " + to_string(player->getHealth()), 30, 20);
 }
 void GameState::tick() {
 	map->tick();

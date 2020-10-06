@@ -60,7 +60,9 @@ void Player::tick(){
 }
 
 void Player::render(){
+
     ofSetColor(256,256,256);
+	ofDrawBitmapString("Lives: " + to_string(health), 30, 20);
     // ofDrawRectangle(getBounds());
     if(facing == UP){
         walkUp->getCurrentFrame().draw(x, y, width, height);
@@ -73,7 +75,8 @@ void Player::render(){
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
 }
-
+int MAXhealth = 3;
+int health = MAXhealth;
 void Player::keyPressed(int key){
     switch(key){
         case 'w':
@@ -88,7 +91,26 @@ void Player::keyPressed(int key){
         case 'd':
             setFacing(RIGHT);
             break;
+        case 'n':
+            if (this->health > 0)
+{
+             this->health--;
+}
+            break;
+        case 'm':
+             if (this->health < MAXhealth)
+        {
+             this->health++;
+        }
+            break;
     }
+}
+
+void Player::die(){
+
+    this->health = this->health - 1;
+    this->x = 312;
+    this->y = 630;
 }
 
 void Player::keyReleased(int key){
