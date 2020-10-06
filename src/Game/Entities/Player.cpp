@@ -74,6 +74,8 @@ void Player::render(){
     }else if(facing == RIGHT){
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
+
+    ofDrawBitmapString("Score: " + to_string(score), 30, 40);
 }
 int MAXhealth = 3;
 int health = MAXhealth;
@@ -155,6 +157,12 @@ void Player::checkCollisions(){
         if(collides(entity)){
             if(dynamic_cast<Dot*>(entity) || dynamic_cast<BigDot*>(entity)){
                 entity->remove = true;
+                //add to the score when player eats a dot
+                if(dynamic_cast<Dot*>(entity)){
+                    this->score += 5;
+                }else if(dynamic_cast<BigDot*>(entity)){
+                    this->score += 10;
+                }
             }
         }
     }
