@@ -1,7 +1,8 @@
 #include "MenuState.h"
 
 MenuState::MenuState() {
-	startButton = new Button(ofGetWidth()/2, ofGetHeight()/2, 64, 50, "Start");
+	startButton = new Button(ofGetWidth()/2, ofGetHeight()/2, 900, 350, "Start");
+	
 }
 void MenuState::tick() {
 	startButton->tick();
@@ -12,8 +13,13 @@ void MenuState::tick() {
 	}
 }
 void MenuState::render() {
-	ofSetBackgroundColor(230, 230, 250);
-	startButton->render();
+	
+	//ofSetBackgroundColor(0, 0, 0);
+	// startButton->render();
+	 ofImage GameBackground("images/ChasingPac.png");
+	 GameBackground.draw(0, 0,ofGetWidth(),ofGetHeight());
+	 ofImage startButton("images/Start.jpg");
+	 startButton.draw(830, 340, ofGetWidth() / 6, ofGetHeight() / 6);
 }
 
 void MenuState::keyPressed(int key){

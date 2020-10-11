@@ -14,6 +14,7 @@ Button::Button(int xPos, int yPos, int width, int height, string buttonText){
 }
 
 void Button::reset(){
+    
     pressedCounter = -1;
     pressed = false;
 }
@@ -34,8 +35,9 @@ void Button::mousePressed(int x, int y){
 }
 
 void Button::render(){
-    ofSetColor(0);
+    ofSetColor(255);
     ofDrawBitmapString(buttonText, xPos+width/2, yPos+height/2);
+    
 }
 
 bool Button::wasPressed(){

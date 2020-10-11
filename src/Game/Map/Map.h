@@ -1,8 +1,9 @@
 #include "Player.h"
-
+#pragma once
 class Map{
     public:
       Map(EntityManager*);
+      // int health = 3;
       void addBlock(Block*);
       void addEntity(Entity*);
       void setPlayer(Player*);
@@ -15,4 +16,5 @@ class Map{
     private:
       EntityManager *entityManager;
       Player *player;
+      bool gameStop = false;
 };

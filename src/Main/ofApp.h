@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "MenuState.h"
 #include "GameState.h"
+#include "GameOverState.h"
 
 class ofApp : public ofBaseApp{
 
@@ -10,7 +11,7 @@ private:
 	State *currentState;
 	MenuState *menuState;
 	GameState *gameState;
-    // Player *health;
+	GameOverState *gameOverState;
 
 public:
 		void setup();

@@ -13,7 +13,7 @@ enum FACING {
 class Player: public Entity{
 
     private:
-        int health = 3;
+        int health = 3;//Pac Health
         int score = 0; //set score to 0
         bool canMove;
         int speed = 4;
@@ -28,7 +28,7 @@ class Player: public Entity{
 
     public:
         Player(int, int, int , int, EntityManager*);
-        int getHealth();
+        int getHealth(){return health;}
         int getScore();
         void tick();
         void render();

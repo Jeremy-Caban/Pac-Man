@@ -37,5 +37,5 @@ class State {
 	private:
 		string nextState;
 		bool finished = false;
-
+		int life = 3;
 };

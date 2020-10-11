@@ -15,5 +15,5 @@ class GameState: public State{
 	private:
 		ofImage mapImage;
 		Map* map;
-		// Player *player;
+		
 };

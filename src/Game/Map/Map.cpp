@@ -1,14 +1,22 @@
 #include "Map.h"
+#include "GameOverState.h"
 
 Map::Map(EntityManager* em){
     entityManager = em;
 }
 
 void Map::tick(){
-	entityManager->tick();
-	player->tick();
-
-
+	if (!gameStop)
+	{
+		entityManager->tick();
+		player->tick();
+	}
+	if (player->getHealth() == 0)
+	{
+		gameStop = true;
+	}
+	
+	
 }
 void Map::render(){
     ofSetBackgroundColor(0, 0, 0);

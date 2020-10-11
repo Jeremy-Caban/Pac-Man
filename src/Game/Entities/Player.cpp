@@ -2,6 +2,9 @@
 #include "EntityManager.h"
 #include "Dot.h"
 #include "BigDot.h"
+#include "Ghost.h"
+#include "GameOverState.h"
+//#include "State.h"
 
 Player::Player(int x, int y, int width, int height, EntityManager* em) : Entity(x, y, width, height){
     sprite.load("images/pacman.png");
@@ -62,7 +65,7 @@ void Player::tick(){
 void Player::render(){
 
     ofSetColor(256,256,256);
-	ofDrawBitmapString("Lives: " + to_string(health), 30, 20);
+	ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
     // ofDrawRectangle(getBounds());
     if(facing == UP){
         walkUp->getCurrentFrame().draw(x, y, width, height);
@@ -75,8 +78,18 @@ void Player::render(){
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
 
-    ofDrawBitmapString("Score: " + to_string(score), 30, 40);
+    ofDrawBitmapString("Score: " + to_string(score), 80, 70);
+
+    if (this->health == 0)
+    {
+        
+        ofImage GameOver("images/Rage.jpg");
+        GameOver.draw(ofGetWidth() * 0.05,ofGetHeight() * 0.05, ofGetWidth() * 0.9,ofGetHeight() * 0.9);
+        ofDrawBitmapString("Score: " + to_string(score), ofGetWidth() * 0.47, ofGetHeight() / 4);
+    }
+    
 }
+//Pac health
 int MAXhealth = 3;
 int health = MAXhealth;
 void Player::keyPressed(int key){
@@ -93,17 +106,19 @@ void Player::keyPressed(int key){
         case 'd':
             setFacing(RIGHT);
             break;
+         //Reduce pac health   
         case 'n':
             if (this->health > 0)
-{
+            {
              this->health--;
-}
+            }
             break;
+        //Increase pac health
         case 'm':
              if (this->health < MAXhealth)
-        {
+            {
              this->health++;
-        }
+            }
             break;
     }
 }
@@ -163,6 +178,11 @@ void Player::checkCollisions(){
                 }else if(dynamic_cast<BigDot*>(entity)){
                     this->score += 10;
                 }
+            }
+
+            if(dynamic_cast<Ghost*>(entity)){
+                //add to the score when player eats a dot
+                die();
             }
         }
     }
