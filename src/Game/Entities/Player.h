@@ -28,8 +28,8 @@ class Player: public Entity{
 
     public:
         Player(int, int, int , int, EntityManager*);
-        int getHealth(){return health;}
-        int getScore();
+        int getHealth(){return health;} //health getter
+        int getScore(){return score;}
         void tick();
         void render();
         void keyPressed(int);
@@ -40,4 +40,8 @@ class Player: public Entity{
         void reset();
         void setFacing(FACING facing);
         void checkCollisions();
+
+        //-----------
+        void setHealth(int newHealth){ this->health = newHealth; }
+        //-----------
 };

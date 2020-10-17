@@ -13,6 +13,8 @@ class Map{
 		  void mousePressed(int x, int y, int button);
 		  void keyReleased(int key);
 
+      bool getGameStop(){ return gameStop; }
+      Player* getPlayer(){ return player; }
     private:
       EntityManager *entityManager;
       Player *player;

@@ -13,7 +13,9 @@ void Map::tick(){
 	}
 	if (player->getHealth() == 0)
 	{
-		gameStop = true;
+		this->gameStop = true;
+	}else if(player->getHealth() > 0){
+		this->gameStop = false;
 	}
 	
 	
@@ -27,6 +29,11 @@ void Map::render(){
 
 void Map::keyPressed(int key){
 	player->keyPressed(key);
+	//-------------------------
+	if(key == ' '){ //will reset the game
+		this->gameStop = false;
+	}
+	//-------------------------
 }
 
 void Map::mousePressed(int x, int y, int button){

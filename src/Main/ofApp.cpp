@@ -22,13 +22,20 @@ void ofApp::update(){
 			if(currentState->getNextState() == "Menu"){
 				currentState = menuState;
 			}else if(currentState->getNextState() == "Game"){
-				currentState = gameState;
-			 }
+				//if the previous state was the menu then set it to gameState
+				if(dynamic_cast<MenuState*>(currentState) != NULL){
+					currentState = gameState;
+				//else means we came from the GameOverState so we reset the map first
+				}else{
+					gameState->resetMap();
+					currentState = gameState;
+				}
+			}
 			else if (currentState->getNextState() == "GameOver")
-			 {
+			{
+				gameOverState->setMap(gameState->getMap());
 			 	currentState = gameOverState;
-				
-			 }
+			}
 			
 			currentState->reset();
 		}

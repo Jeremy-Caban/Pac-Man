@@ -84,13 +84,12 @@ void Player::render(){
 
     ofDrawBitmapString("Score: " + to_string(score), 80, 70);
 
-    if (this->health == 0)
-    {
-        
-        ofImage GameOver("images/Rage.jpg");
-        GameOver.draw(ofGetWidth() * 0.05,ofGetHeight() * 0.05, ofGetWidth() * 0.9,ofGetHeight() * 0.9);
-        ofDrawBitmapString("Score: " + to_string(score), ofGetWidth() * 0.47, ofGetHeight() / 4);
-    }
+    // if (this->health == 0)
+    // {
+    //     ofImage GameOver("images/Rage.jpg");
+    //     GameOver.draw(ofGetWidth() * 0.05,ofGetHeight() * 0.05, ofGetWidth() * 0.9,ofGetHeight() * 0.9);
+    //     ofDrawBitmapString("Score: " + to_string(score), ofGetWidth() * 0.47, ofGetHeight() / 4);
+    // }
     
 }
 //Pac health
@@ -125,10 +124,10 @@ void Player::keyPressed(int key){
              this->health++;
             }
 
-            if (this->health < MAXhealth)
-            {
-                this->health++;
-            }
+            // if (this->health < MAXhealth)
+            // {
+            //     this->health++;
+            // }
             break;
         case 'g':
             ofImage  newImage("images/Background.png");
@@ -142,7 +141,7 @@ void Player::die(){
 
     this->health = this->health - 1;
     this->x = 312;
-    this->y = 630;
+    this->y = 640;
 }
 
 void Player::keyReleased(int key){
@@ -196,7 +195,6 @@ void Player::checkCollisions(){
             }
 
             if(dynamic_cast<Ghost*>(entity)){
-                //add to the score when player eats a dot
                 die();
             }
         }
