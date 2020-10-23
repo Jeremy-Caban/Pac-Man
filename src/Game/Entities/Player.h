@@ -16,7 +16,7 @@ class Player: public Entity{
         int health = 3;//Pac Health
         int score = 0; //set score to 0
         bool canMove;
-        int speed = 4;
+        int speed = 8;
         bool walking = false;
         FACING facing = DOWN;
         ofImage up, down, left, right;

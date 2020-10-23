@@ -4,11 +4,8 @@
 #include "BigDot.h"
 #include "Ghost.h"
 #include "GameOverState.h"
-//#include "State.h"
-
-#include "Ghost.h"
-
-#include "Ghost.h"
+#include <ctime>
+#include <cstdlib>
 
 Player::Player(int x, int y, int width, int height, EntityManager* em) : Entity(x, y, width, height){
     sprite.load("images/pacman.png");
@@ -82,15 +79,7 @@ void Player::render(){
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
 
-    ofDrawBitmapString("Score: " + to_string(score), 80, 70);
-
-    // if (this->health == 0)
-    // {
-    //     ofImage GameOver("images/Rage.jpg");
-    //     GameOver.draw(ofGetWidth() * 0.05,ofGetHeight() * 0.05, ofGetWidth() * 0.9,ofGetHeight() * 0.9);
-    //     ofDrawBitmapString("Score: " + to_string(score), ofGetWidth() * 0.47, ofGetHeight() / 4);
-    // }
-    
+    ofDrawBitmapString("Score: " + to_string(score), 80, 70);    
 }
 //Pac health
 int MAXhealth = 3;
@@ -118,21 +107,48 @@ void Player::keyPressed(int key){
             break;
         //Increase pac health
         case 'm':
-
-             if (this->health < MAXhealth)
+            if (this->health < MAXhealth)
             {
-             this->health++;
+                this->health++;
             }
-
-            // if (this->health < MAXhealth)
-            // {
-            //     this->health++;
-            // }
             break;
+            
         case 'g':
             ofImage  newImage("images/Background.png");
-            Entity* newGhost = new Ghost(504, 368, 16,16, newImage);
-            em->entities.push_back(newGhost);
+            srand(time(0));
+            //pink a random color when spawning a ghost
+            switch(rand() % 4 + 1){
+                case 1:
+                    {
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage,RED);
+                    em->entities.push_back(newGhost);
+                    break;
+                    }
+                case 2:
+                    {
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, PINK);
+                    em->entities.push_back(newGhost);
+                    break;
+                    }
+                case 3:
+                    {
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN);
+                    em->entities.push_back(newGhost);
+                    break;
+                    }
+                case 4:
+                    {
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE);
+                    em->entities.push_back(newGhost);
+                    break;
+                    }
+                default:
+                    {
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage);
+                    em->entities.push_back(newGhost);
+                    break;
+                    }
+            }
             break;
     }
 }
