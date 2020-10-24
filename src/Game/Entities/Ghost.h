@@ -29,7 +29,7 @@ class Ghost: public Entity{
         int getSpeed(){ return this->speed;}
         void setSpeed(int newSpeed){ this->speed = newSpeed;}
         color getColor(){ return ghostColor; }
-        
         void tick();
         void checkCollisions();
+        void setDirection(DIRECTION nd){position = nd;}
 };
