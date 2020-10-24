@@ -120,31 +120,31 @@ void Player::keyPressed(int key){
             switch(rand() % 4 + 1){
                 case 1:
                     {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage,RED);
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage,RED, this->em);
                     em->entities.push_back(newGhost);
                     break;
                     }
                 case 2:
                     {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, PINK);
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
                     em->entities.push_back(newGhost);
                     break;
                     }
                 case 3:
                     {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN);
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
                     em->entities.push_back(newGhost);
                     break;
                     }
                 case 4:
                     {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE);
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
                     em->entities.push_back(newGhost);
                     break;
                     }
                 default:
                     {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage);
+                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
                     em->entities.push_back(newGhost);
                     break;
                     }

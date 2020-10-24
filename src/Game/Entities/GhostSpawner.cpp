@@ -12,25 +12,25 @@ void GhostSpawner::tick(){
             switch(i){
                 case 1:
                     {
-                    Ghost* redGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, RED);
+                    Ghost* redGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, RED, this->em);
                     this->em->entities.push_back(redGhost);
                     break;
                     }
                 case 2:
                     {
-                    Ghost* pinkGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, PINK);
+                    Ghost* pinkGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, PINK, this->em);
                     this->em->entities.push_back(pinkGhost);
                     break;
                     }
                 case 3:
                     {
-                    Ghost* cyanGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, CYAN);
+                    Ghost* cyanGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, CYAN, this->em);
                     this->em->entities.push_back(cyanGhost);
                     break;
                     }
                 case 4:
                     {
-                    Ghost* orangeGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, ORANGE);
+                    Ghost* orangeGhost = new Ghost(504, 368 - (16 * (i-1)), 16, 16, this->spriteList, ORANGE, this->em);
                     this->em->entities.push_back(orangeGhost);
                     break;
                     }

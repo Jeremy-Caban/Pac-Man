@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 #include "EntityManager.h"
+#include <cstdlib>
+#include <ctime>
 
 enum DIRECTION {
     U,
@@ -23,9 +25,8 @@ class Ghost: public Entity{
         EntityManager *em;
         DIRECTION position = U;
     public:
-        Ghost(int, int, int, int, ofImage);
-        Ghost(int, int, int, int, ofImage, color); //overloaded to accept a color indicator and entity manager
         Ghost(int, int, int, int, ofImage,EntityManager*);
+        Ghost(int, int, int, int, ofImage, color,EntityManager*); //overloaded to accept a color indicator and entity manager
         int getSpeed(){ return this->speed;}
         void setSpeed(int newSpeed){ this->speed = newSpeed;}
         color getColor(){ return ghostColor; }
