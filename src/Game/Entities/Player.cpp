@@ -157,7 +157,7 @@ void Player::die(){
 
     this->health = this->health - 1;
     this->x = 312;
-    this->y = 640;
+    this->y = 630;
 }
 
 void Player::keyReleased(int key){
