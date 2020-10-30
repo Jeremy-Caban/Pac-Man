@@ -25,6 +25,8 @@ class Player: public Entity{
         Animation *walkLeft;
         Animation *walkRight;
         EntityManager* em;
+        int startingXPos;
+        int startingYPos;
 
     public:
         Player(int, int, int , int, EntityManager*);

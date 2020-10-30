@@ -46,15 +46,21 @@ Player::Player(int x, int y, int width, int height, EntityManager *em) : Entity(
     walkRight = new Animation(1, rightAnimframes);
 
     this->em = em;
+    //save coordinates to respawn when you die
+    this->startingXPos = x;
+    this->startingYPos = y;
 }
 void Player::tick()
 {
     canMove = true;
     checkCollisions();
-    int a = rand() % 5;
-    if (a == 0)
-    {
-        chaser();
+    //after 500 ticks the ghosts will start chasing pacman
+    if(this->ticks >= 500){
+        int a = rand() % 5;
+        if (a == 0)
+        {
+            chaser();
+        }
     }
     if (canMove)
     {
@@ -79,14 +85,21 @@ void Player::tick()
             walkRight->tick();
         }
     }
+    this->ticks++;
 }
 
 void Player::render()
 {
 
     ofSetColor(256, 256, 256);
+    //Display lives
     ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
-    // ofDrawRectangle(getBounds());
+    //Display score;
+    ofDrawBitmapString("Score: " + to_string(score), 80, 70);
+    //Display a message once the ghost start chasing you
+    if(this->ticks >= 500){
+        ofDrawBitmapString("The Ghosts will chase you now...", 380, 30);
+    }
     if (facing == UP)
     {
         walkUp->getCurrentFrame().draw(x, y, width, height);
@@ -104,11 +117,9 @@ void Player::render()
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
 
-    ofDrawBitmapString("Score: " + to_string(score), 80, 70);
 }
 //Pac health
 int MAXhealth = 3;
-int health = MAXhealth;
 void Player::keyPressed(int key)
 {
     switch (key)
@@ -132,7 +143,7 @@ void Player::keyPressed(int key)
             this->health--;
         }
         break;
-    //Increase pac health
+    //Increase pacmans' health if it aint maxed out
     case 'm':
         if (this->health < MAXhealth)
         {
@@ -143,39 +154,39 @@ void Player::keyPressed(int key)
     case 'g':
         ofImage newImage("images/Background.png");
         srand(time(0));
-        //pink a random color when spawning a ghost
+        //pick a random color when spawning a ghost
         switch (rand() % 4 + 1)
         {
-        case 1:
-        {
-            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, RED, this->em);
-            em->entities.push_back(newGhost);
-            break;
-        }
-        case 2:
-        {
-            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
-            em->entities.push_back(newGhost);
-            break;
-        }
-        case 3:
-        {
-            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
-            em->entities.push_back(newGhost);
-            break;
-        }
-        case 4:
-        {
-            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
-            em->entities.push_back(newGhost);
-            break;
-        }
-        default:
-        {
-            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
-            em->entities.push_back(newGhost);
-            break;
-        }
+            case 1:
+            {
+                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, RED, this->em);
+                em->entities.push_back(newGhost);
+                break;
+            }
+            case 2:
+            {
+                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
+                em->entities.push_back(newGhost);
+                break;
+            }
+            case 3:
+            {
+                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
+                em->entities.push_back(newGhost);
+                break;
+            }
+            case 4:
+            {
+                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
+                em->entities.push_back(newGhost);
+                break;
+            }
+            default:
+            {
+                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
+                em->entities.push_back(newGhost);
+                break;
+            }
         }
         break;
     }
@@ -183,10 +194,10 @@ void Player::keyPressed(int key)
 
 void Player::die()
 {
-
+    //reduce health by one and teleport to the start
     this->health = this->health - 1;
-    this->x = 312;
-    this->y = 630;
+    this->x = this->startingXPos;
+    this->y = this->startingYPos;
 }
 
 void Player::keyReleased(int key)
@@ -207,42 +218,21 @@ void Player::setFacing(FACING facing)
 
 void Player::chaser()
 {
+    //makes ghost chace pacman based on where the player is located
     srand(time(0));
     for (Entity *entity : em->entities)
     {
         Ghost *c1 = dynamic_cast<Ghost *>(entity);
-        if (c1 != nullptr)
-        {
-            int s = rand() % 2;
-            if (s == 0)
-            {
-            
-            if (this->getY() > c1->getY())
-
-            {
+        if (c1 != nullptr){
+            unsigned int s = rand() % 2;
+            if (s == 0 && this->getY() > c1->getY()){
                 c1->setDirection(D);
-            }
-            
-            else
-            {
+            }else if(s == 0 && this->getY() < c1->getY()){
                 c1->setDirection(U);
-            }
-
-            }
-            else
-            {
-
-            if (this->getX() > c1->getX())
-
-            {
+            }else if(s == 1 && this->getX() > c1->getX()){
                 c1->setDirection(R);
-            }
-
-            else
-            {
+            }else{
                 c1->setDirection(L);
-            }
-
             }
         }
     }
@@ -296,7 +286,6 @@ void Player::checkCollisions()
                     this->score += 10;
                 }
             }
-
             if (dynamic_cast<Ghost *>(entity))
             {
                 die();
