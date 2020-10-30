@@ -7,213 +7,300 @@
 #include <ctime>
 #include <cstdlib>
 
-Player::Player(int x, int y, int width, int height, EntityManager* em) : Entity(x, y, width, height){
+Player::Player(int x, int y, int width, int height, EntityManager *em) : Entity(x, y, width, height)
+{
     sprite.load("images/pacman.png");
     down.cropFrom(sprite, 0, 48, 16, 16);
     up.cropFrom(sprite, 0, 32, 16, 16);
     left.cropFrom(sprite, 0, 16, 16, 16);
     right.cropFrom(sprite, 0, 0, 16, 16);
-    
+
     vector<ofImage> downAnimframes;
     vector<ofImage> upAnimframes;
     vector<ofImage> leftAnimframes;
     vector<ofImage> rightAnimframes;
     ofImage temp;
-    for(int i=0; i<3; i++){
-        temp.cropFrom(sprite, i*16, 48, 16, 16);
+    for (int i = 0; i < 3; i++)
+    {
+        temp.cropFrom(sprite, i * 16, 48, 16, 16);
         downAnimframes.push_back(temp);
     }
-    for(int i=0; i<3; i++){
-        temp.cropFrom(sprite, i*16, 32, 16, 16);
+    for (int i = 0; i < 3; i++)
+    {
+        temp.cropFrom(sprite, i * 16, 32, 16, 16);
         upAnimframes.push_back(temp);
     }
-    for(int i=0; i<3; i++){
-        temp.cropFrom(sprite, i*16, 16, 16, 16);
+    for (int i = 0; i < 3; i++)
+    {
+        temp.cropFrom(sprite, i * 16, 16, 16, 16);
         leftAnimframes.push_back(temp);
     }
-    for(int i=0; i<3; i++){
-        temp.cropFrom(sprite, i*16, 0, 16, 16);
+    for (int i = 0; i < 3; i++)
+    {
+        temp.cropFrom(sprite, i * 16, 0, 16, 16);
         rightAnimframes.push_back(temp);
     }
-    walkDown = new Animation(1,downAnimframes);
-    walkUp = new Animation(1,upAnimframes);
-    walkLeft = new Animation(1,leftAnimframes);
-    walkRight = new Animation(1,rightAnimframes);
+    walkDown = new Animation(1, downAnimframes);
+    walkUp = new Animation(1, upAnimframes);
+    walkLeft = new Animation(1, leftAnimframes);
+    walkRight = new Animation(1, rightAnimframes);
 
     this->em = em;
-    
 }
-void Player::tick(){
+void Player::tick()
+{
     canMove = true;
     checkCollisions();
-    if(canMove){
-        if(facing == UP){
-            y-= speed;
+    int a = rand() % 5;
+    if (a == 0)
+    {
+        chaser();
+    }
+    if (canMove)
+    {
+        if (facing == UP)
+        {
+            y -= speed;
             walkUp->tick();
-        }else if(facing == DOWN){
-            y+=speed;
+        }
+        else if (facing == DOWN)
+        {
+            y += speed;
             walkDown->tick();
-        }else if(facing == LEFT){
-            x-=speed;
+        }
+        else if (facing == LEFT)
+        {
+            x -= speed;
             walkLeft->tick();
-        }else if(facing == RIGHT){
-            x+=speed;
+        }
+        else if (facing == RIGHT)
+        {
+            x += speed;
             walkRight->tick();
         }
     }
 }
 
-void Player::render(){
+void Player::render()
+{
 
-    ofSetColor(256,256,256);
-	ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
+    ofSetColor(256, 256, 256);
+    ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
     // ofDrawRectangle(getBounds());
-    if(facing == UP){
+    if (facing == UP)
+    {
         walkUp->getCurrentFrame().draw(x, y, width, height);
-        
-    }else if(facing == DOWN){
+    }
+    else if (facing == DOWN)
+    {
         walkDown->getCurrentFrame().draw(x, y, width, height);
-    }else if(facing == LEFT){
+    }
+    else if (facing == LEFT)
+    {
         walkLeft->getCurrentFrame().draw(x, y, width, height);
-    }else if(facing == RIGHT){
+    }
+    else if (facing == RIGHT)
+    {
         walkRight->getCurrentFrame().draw(x, y, width, height);
     }
 
-    ofDrawBitmapString("Score: " + to_string(score), 80, 70);    
+    ofDrawBitmapString("Score: " + to_string(score), 80, 70);
 }
 //Pac health
 int MAXhealth = 3;
 int health = MAXhealth;
-void Player::keyPressed(int key){
-    switch(key){
-        case 'w':
-            setFacing(UP);
+void Player::keyPressed(int key)
+{
+    switch (key)
+    {
+    case 'w':
+        setFacing(UP);
+        break;
+    case 's':
+        setFacing(DOWN);
+        break;
+    case 'a':
+        setFacing(LEFT);
+        break;
+    case 'd':
+        setFacing(RIGHT);
+        break;
+        //Reduce pac health
+    case 'n':
+        if (this->health > 0)
+        {
+            this->health--;
+        }
+        break;
+    //Increase pac health
+    case 'm':
+        if (this->health < MAXhealth)
+        {
+            this->health++;
+        }
+        break;
+
+    case 'g':
+        ofImage newImage("images/Background.png");
+        srand(time(0));
+        //pink a random color when spawning a ghost
+        switch (rand() % 4 + 1)
+        {
+        case 1:
+        {
+            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, RED, this->em);
+            em->entities.push_back(newGhost);
             break;
-        case 's':
-            setFacing(DOWN);
+        }
+        case 2:
+        {
+            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
+            em->entities.push_back(newGhost);
             break;
-        case 'a':
-            setFacing(LEFT);
+        }
+        case 3:
+        {
+            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
+            em->entities.push_back(newGhost);
             break;
-        case 'd':
-            setFacing(RIGHT);
+        }
+        case 4:
+        {
+            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
+            em->entities.push_back(newGhost);
             break;
-         //Reduce pac health   
-        case 'n':
-            if (this->health > 0)
-            {
-                this->health--;
-            }
+        }
+        default:
+        {
+            Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
+            em->entities.push_back(newGhost);
             break;
-        //Increase pac health
-        case 'm':
-            if (this->health < MAXhealth)
-            {
-                this->health++;
-            }
-            break;
-            
-        case 'g':
-            ofImage  newImage("images/Background.png");
-            srand(time(0));
-            //pink a random color when spawning a ghost
-            switch(rand() % 4 + 1){
-                case 1:
-                    {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage,RED, this->em);
-                    em->entities.push_back(newGhost);
-                    break;
-                    }
-                case 2:
-                    {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
-                    em->entities.push_back(newGhost);
-                    break;
-                    }
-                case 3:
-                    {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
-                    em->entities.push_back(newGhost);
-                    break;
-                    }
-                case 4:
-                    {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
-                    em->entities.push_back(newGhost);
-                    break;
-                    }
-                default:
-                    {
-                    Entity* newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
-                    em->entities.push_back(newGhost);
-                    break;
-                    }
-            }
-            break;
+        }
+        }
+        break;
     }
 }
 
-void Player::die(){
+void Player::die()
+{
 
     this->health = this->health - 1;
     this->x = 312;
     this->y = 630;
 }
 
-void Player::keyReleased(int key){
-    if(key == 'w' || key =='s' || key == 'a' || key == 'd'){
+void Player::keyReleased(int key)
+{
+    if (key == 'w' || key == 's' || key == 'a' || key == 'd')
+    {
         walking = false;
     }
 }
-void Player::mousePressed(int x, int y, int button){
-
+void Player::mousePressed(int x, int y, int button)
+{
 }
 
-void Player::setFacing(FACING facing){
+void Player::setFacing(FACING facing)
+{
     this->facing = facing;
 }
 
-void Player::checkCollisions(){
-    for(Block* block: em->blocks){
-        switch(facing){
-            case UP:
-                if(this->getBounds(x, y-speed).intersects(block->getBounds())){
-                    canMove = false;
-                }
-                break;
-            case DOWN:
-                if(this->getBounds(x, y+speed).intersects(block->getBounds())){
-                    canMove = false;
-                }
-                break;
-            case LEFT:
-                if(this->getBounds(x-speed, y).intersects(block->getBounds())){
-                    canMove = false;
-                }
-                break;
-            case RIGHT:
-                if(this->getBounds(x+speed, y).intersects(block->getBounds())){
-                    canMove = false;
-                }
-                break;
+void Player::chaser()
+{
+    srand(time(0));
+    for (Entity *entity : em->entities)
+    {
+        Ghost *c1 = dynamic_cast<Ghost *>(entity);
+        if (c1 != nullptr)
+        {
+            int s = rand() % 2;
+            if (s == 0)
+            {
+            
+            if (this->getY() > c1->getY())
+
+            {
+                c1->setDirection(D);
+            }
+            
+            else
+            {
+                c1->setDirection(U);
+            }
+
+            }
+            else
+            {
+
+            if (this->getX() > c1->getX())
+
+            {
+                c1->setDirection(R);
+            }
+
+            else
+            {
+                c1->setDirection(L);
+            }
+
+            }
         }
     }
-    for(Entity* entity:em->entities){
-        if(collides(entity)){
-            if(dynamic_cast<Dot*>(entity) || dynamic_cast<BigDot*>(entity)){
+}
+void Player::checkCollisions()
+{
+    for (Block *block : em->blocks)
+    {
+        switch (facing)
+        {
+        case UP:
+            if (this->getBounds(x, y - speed).intersects(block->getBounds()))
+            {
+                canMove = false;
+            }
+            break;
+        case DOWN:
+            if (this->getBounds(x, y + speed).intersects(block->getBounds()))
+            {
+                canMove = false;
+            }
+            break;
+        case LEFT:
+            if (this->getBounds(x - speed, y).intersects(block->getBounds()))
+            {
+                canMove = false;
+            }
+            break;
+        case RIGHT:
+            if (this->getBounds(x + speed, y).intersects(block->getBounds()))
+            {
+                canMove = false;
+            }
+            break;
+        }
+    }
+    for (Entity *entity : em->entities)
+    {
+        if (collides(entity))
+        {
+            if (dynamic_cast<Dot *>(entity) || dynamic_cast<BigDot *>(entity))
+            {
                 entity->remove = true;
                 //add to the score when player eats a dot
-                if(dynamic_cast<Dot*>(entity)){
+                if (dynamic_cast<Dot *>(entity))
+                {
                     this->score += 5;
-                }else if(dynamic_cast<BigDot*>(entity)){
+                }
+                else if (dynamic_cast<BigDot *>(entity))
+                {
                     this->score += 10;
                 }
             }
 
-            if(dynamic_cast<Ghost*>(entity)){
+            if (dynamic_cast<Ghost *>(entity))
+            {
                 die();
             }
         }
     }
-    
 }

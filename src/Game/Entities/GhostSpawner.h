@@ -8,6 +8,8 @@ class GhostSpawner: public Entity{
         bool fourGhostSpawned = false; //bool to check if the first 4 ghost have spawned
         EntityManager* em;
         ofImage spriteList;
+        int xPos;
+        int yPos;
     public:
         GhostSpawner(int, int, int, int, ofImage, EntityManager*);
         //void reset();

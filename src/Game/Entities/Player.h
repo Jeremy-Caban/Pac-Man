@@ -39,6 +39,8 @@ class Player: public Entity{
         void mousePressed(int, int, int);
         void reset();
         void setFacing(FACING facing);
+        void chaser();
+        int pacPosition();
         void checkCollisions();
 
         //-----------

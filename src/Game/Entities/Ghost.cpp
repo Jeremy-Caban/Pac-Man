@@ -1,4 +1,5 @@
 #include "Ghost.h"
+#include "Player.h"
 
 Ghost::Ghost(int x, int y, int width, int height, ofImage spriteSheet,EntityManager* em): Entity(x, y, width, height){
     sprite.cropFrom(spriteSheet,456,64,16,16);
@@ -44,22 +45,36 @@ void Ghost::tick(){
         }
     }
 }
-
+// int Ghost::pacPosition()
+// {
+//     srand(time(0));
+//     for (Entity *entity : em->entities)
+//     {
+//         Ghost *c1 = dynamic_cast<Ghost *>(entity);
+//         Player *c2 = dynamic_cast<Player *>(entity);
+//         if (c2 != nullptr)
+//         {
+//            return ;
+//            break;
+//         }
+//     }
+// }
 void Ghost::checkCollisions(){
     srand(time(0));
+    int p = 9;
     for(Block* block:em->blocks){
         switch(position){
             case U:
                 if(this->getBounds(x, y-speed).intersects(block->getBounds())){
                     canMove = false;
                     int r = rand() % 2;
-                    if (r == 1)
+                    if (r == 0)
                     {
                         setDirection(L);
                     }
                     else
                     {
-                        setDirection(U);
+                        setDirection(R);
                     }
                     
                 }
@@ -70,11 +85,11 @@ void Ghost::checkCollisions(){
                     int r = rand() % 2;
                      if (r == 0)
                     {
-                        setDirection(R);
+                        setDirection(L);
                     }
                     else
                     {
-                        setDirection(L);
+                        setDirection(R);
                     }
                 }
                 break;
@@ -82,13 +97,13 @@ void Ghost::checkCollisions(){
                 if(this->getBounds(x-speed, y).intersects(block->getBounds())){
                     canMove = false;
                     int r = rand() % 2;
-                    if (r == 1)
+                    if (r == 0)
                     {
                         setDirection(D);
                     }
                     else
                     {
-                        setDirection(R);
+                        setDirection(U);
                     }
                 }
                 break;
@@ -102,7 +117,7 @@ void Ghost::checkCollisions(){
                     }
                     else
                     {
-                        setDirection(L);
+                        setDirection(D);
                     }
                 }
                 break;
