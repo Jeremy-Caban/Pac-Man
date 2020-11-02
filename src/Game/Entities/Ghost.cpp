@@ -4,6 +4,7 @@
 Ghost::Ghost(int x, int y, int width, int height, ofImage spriteSheet,EntityManager* em): Entity(x, y, width, height){
     this->ghostPic.cropFrom(spriteSheet,456,64,16,16);
     this->em = em;
+    this->ghostColor = RED; //default color
     //create vulnerable animation
     firstFrame.cropFrom(spriteSheet,584,64,16,16);
     secondFrame.cropFrom(spriteSheet,616,64,16,16);
@@ -16,25 +17,22 @@ Ghost::Ghost(int x, int y, int width, int height, ofImage spriteSheet, color col
         //crop a different colored ghost depending on the color indicator (1-4)
         case RED:
             this->ghostPic.cropFrom(spriteSheet,456,64,16,16);
-            this->em = em;
             break;
         case PINK:
             this->ghostPic.cropFrom(spriteSheet,456,80,16,16);
-            this->em = em;
             break;
         case CYAN:
             this->ghostPic.cropFrom(spriteSheet,456,96,16,16);
-            this->em = em;
             break;
         case ORANGE:
             this->ghostPic.cropFrom(spriteSheet,456,112,16,16);
-            this->em = em;
             break;
         default: // red will be the default color
             this->ghostPic.cropFrom(spriteSheet,456,64,16,16);
-            this->em = em;
             break;
     }
+    this->em = em;
+    this->ghostColor = color;
     //create vulnerable animation
     firstFrame.cropFrom(spriteSheet,584,64,16,16);
     secondFrame.cropFrom(spriteSheet,616,64,16,16);
@@ -60,7 +58,7 @@ void Ghost::tick(){
 void Ghost::render(){
     if(this->getIsVulnerable() == false){ //draw the ghost while not vulnerable
         this->ghostPic.draw(x,y,width,height);
-    }else if(this->getIsVulnerable() == true){ //else will draw vulnerable animation 
+    }else if(this->getIsVulnerable() == true){ //else, it will draw vulnerable animation 
         this->vulnerableState->getCurrentFrame().draw(x,y,width,height);
         vulnerableState->tick();
     }
@@ -71,6 +69,9 @@ void Ghost::checkCollisions(){
         switch(position){
             case U:
                 if(this->getBounds(x, y-speed).intersects(block->getBounds())){
+                    //ghost spawn facing up so colliding with a wall occurs only when they are out of the box
+                    //prevents ghost from getting stuck when they spawn chasing pac man
+                    this->isOutOfBox = true;
                     canMove = false;
                     unsigned int r = rand() % 2;
                     if (r == 0)

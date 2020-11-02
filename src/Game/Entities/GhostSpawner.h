@@ -10,9 +10,10 @@ class GhostSpawner: public Entity{
         ofImage spriteList;
         int xPos;
         int yPos;
+        vector<color> toSpawnList;
+        int spawnTimer;
     public:
         GhostSpawner(int, int, int, int, ofImage, EntityManager*);
-        //void reset();
+        void addGhostToSpawn(color c){ toSpawnList.push_back(c); }
         void tick();
-        //void render();
 };

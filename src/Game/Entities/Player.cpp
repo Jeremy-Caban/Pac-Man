@@ -88,7 +88,9 @@ void Player::tick()
         }
     }
     this->ticks++;
-    //note: "== true" is used to improve readability and is not entirely necessary for it to function equally
+
+    //note: "== true" and "== false" is used to improve readability and is not entirely necessary for it to function equally
+
     //whilst powered up, start the powered up timer
     if(this->getIsPoweredUp() == true && this->poweredUpTimer < 300){
         this->poweredUpTimer++;
@@ -127,7 +129,7 @@ void Player::render()
     ofDrawBitmapString("Score: " + to_string(score), 80, 70);
     //Display a message once the ghost start chasing you
     if(this->ticks >= 500){
-        ofDrawBitmapString("The Ghosts are more inclined to chase you now...", 380, 30);
+        ofDrawBitmapString("The Ghosts are more inclined to chase you now...", 340, 30);
     }
     if (facing == UP)
     {
@@ -245,12 +247,13 @@ void Player::setFacing(FACING facing)
 
 void Player::chaser()
 {
-    //makes ghost chace pacman based on where the player is located
+    //makes ghost chase pacman based on where the player is located
     srand(time(0));
     for (Entity *entity : em->entities)
     {
         Ghost *c1 = dynamic_cast<Ghost *>(entity);
-        if (c1 != nullptr){
+        //will only chase pacman after getting out of the box to prevent it from getting stuck
+        if (c1 != nullptr && c1->getIsOutOfBox() ==  true){
             unsigned int s = rand() % 2;
             if (s == 0 && this->getY() > c1->getY()){
                 c1->setDirection(D);
@@ -321,6 +324,12 @@ void Player::checkCollisions()
                 break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
             }
             else if (dynamic_cast<Ghost*>(entity) && this->getIsPoweredUp() == true){
+                //save the ghosts color before removing
+                for(Entity* e: this->em->entities){
+                    if(dynamic_cast<GhostSpawner*>(e)){
+                        dynamic_cast<GhostSpawner*>(e)->addGhostToSpawn(dynamic_cast<Ghost*>(entity)->getColor());
+                    }
+                }
                 entity->remove = true;
                 break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
             }

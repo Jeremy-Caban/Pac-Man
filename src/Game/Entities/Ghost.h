@@ -31,17 +31,23 @@ class Ghost: public Entity{
         vector<ofImage> frames;
         ofImage firstFrame;
         ofImage secondFrame;
+        bool isOutOfBox = false;
 
     public:
         Ghost(int, int, int, int, ofImage,EntityManager*);
         Ghost(int, int, int, int, ofImage, color,EntityManager*); //overloaded to accept a color indicator and entity manager
-        int getSpeed(){ return this->speed;}
-        void setSpeed(int newSpeed){ this->speed = newSpeed; }
+        //getters
+        int getSpeed(){ return this->speed; }
         color getColor(){ return ghostColor; }
-        void setIsVulnerable(bool newVulnerable){ this->isVulnerable = newVulnerable; }
         bool getIsVulnerable(){ return this->isVulnerable; }
+        bool getIsOutOfBox(){ return isOutOfBox; }
+        //setters
+        void setSpeed(int newSpeed){ this->speed = newSpeed; }
+        void setIsVulnerable(bool newVulnerable){ this->isVulnerable = newVulnerable; }
+        void setDirection(DIRECTION nd){position = nd;}
+        
         void tick();
         void render();
         void checkCollisions();
-        void setDirection(DIRECTION nd){position = nd;}
+        
 };

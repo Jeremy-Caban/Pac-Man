@@ -40,4 +40,13 @@ void GhostSpawner::tick(){
         }
         fourGhostSpawned = true;
     }
+    //spawn a ghost every 150 ticks
+    if(this->toSpawnList.empty()){
+        this->spawnTimer = 1;
+    }else if(this->spawnTimer % 150 == 0){
+        Ghost* respawnedGhost = new Ghost(this->xPos, this->yPos,16,16,this->spriteList, toSpawnList[0], this->em);
+        this->em->entities.push_back(respawnedGhost);
+        toSpawnList.erase(toSpawnList.begin());
+    }
+    this->spawnTimer++;
 }
