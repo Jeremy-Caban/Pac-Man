@@ -55,12 +55,14 @@ void Player::tick()
     canMove = true;
     checkCollisions();
     //after 500 ticks the ghosts will start chasing pacman
-    if(this->ticks >= 500){
+    if(this->ticks >= 500 && this->ticks < 1000){
         int a = rand() % 5;
         if (a == 0)
         {
             chaser();
         }
+    }else if( this->ticks >= 1000){
+        this->ticks = 0;
     }
     if (canMove)
     {
@@ -86,6 +88,33 @@ void Player::tick()
         }
     }
     this->ticks++;
+    //note: "== true" is used to improve readability and is not entirely necessary for it to function equally
+    //whilst powered up, start the powered up timer
+    if(this->getIsPoweredUp() == true && this->poweredUpTimer < 300){
+        this->poweredUpTimer++;
+    }else{
+    //reset timer and remove power up when time is exceeded
+        this->poweredUpTimer = 0;
+        this->setIsPoweredUp(false);
+    }
+    //while powered up, all ghost should become vulnerable
+    if(this->getIsPoweredUp() == true){
+        for(Entity* entity: em->entities)
+        {
+            if(dynamic_cast<Ghost*>(entity)){
+                dynamic_cast<Ghost*>(entity)->setIsVulnerable(true);
+                dynamic_cast<Ghost*>(entity)->setSpeed(2);
+            }
+        }
+    }else if(this->getIsPoweredUp() == false){
+        for(Entity* entity: em->entities)
+        {
+            if(dynamic_cast<Ghost*>(entity)){
+                dynamic_cast<Ghost*>(entity)->setIsVulnerable(false);
+                dynamic_cast<Ghost*>(entity)->setSpeed(4);
+            }
+        }
+    }
 }
 
 void Player::render()
@@ -98,7 +127,7 @@ void Player::render()
     ofDrawBitmapString("Score: " + to_string(score), 80, 70);
     //Display a message once the ghost start chasing you
     if(this->ticks >= 500){
-        ofDrawBitmapString("The Ghosts will chase you now...", 380, 30);
+        ofDrawBitmapString("The Ghosts are more inclined to chase you now...", 380, 30);
     }
     if (facing == UP)
     {
@@ -118,8 +147,6 @@ void Player::render()
     }
 
 }
-//Pac health
-int MAXhealth = 3;
 void Player::keyPressed(int key)
 {
     switch (key)
@@ -145,7 +172,7 @@ void Player::keyPressed(int key)
         break;
     //Increase pacmans' health if it aint maxed out
     case 'm':
-        if (this->health < MAXhealth)
+        if (this->health < this->MAXhealth)
         {
             this->health++;
         }
@@ -273,7 +300,7 @@ void Player::checkCollisions()
     {
         if (collides(entity))
         {
-            if (dynamic_cast<Dot *>(entity) || dynamic_cast<BigDot *>(entity))
+            if (dynamic_cast<Dot*>(entity) || dynamic_cast<BigDot*>(entity))
             {
                 entity->remove = true;
                 //add to the score when player eats a dot
@@ -281,14 +308,21 @@ void Player::checkCollisions()
                 {
                     this->score += 5;
                 }
-                else if (dynamic_cast<BigDot *>(entity))
+                else if (dynamic_cast<BigDot*>(entity))
                 {
                     this->score += 10;
+                    this->setIsPoweredUp(true);
                 }
+                break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
             }
-            if (dynamic_cast<Ghost *>(entity))
+            else if (dynamic_cast<Ghost*>(entity) && this->getIsPoweredUp() == false)
             {
                 die();
+                break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
+            }
+            else if (dynamic_cast<Ghost*>(entity) && this->getIsPoweredUp() == true){
+                entity->remove = true;
+                break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
             }
         }
     }

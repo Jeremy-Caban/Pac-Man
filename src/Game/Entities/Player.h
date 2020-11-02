@@ -13,6 +13,8 @@ enum FACING {
 class Player: public Entity{
 
     private:
+        //Pac health
+        int MAXhealth = 3;
         int health = 3;//Pac Health
         int score = 0; //set score to 0
         bool canMove;
@@ -27,11 +29,17 @@ class Player: public Entity{
         EntityManager* em;
         int startingXPos;
         int startingYPos;
-
+        bool isPoweredUp = false;
+        int poweredUpTimer;
     public:
         Player(int, int, int , int, EntityManager*);
         int getHealth(){return health;} //health getter
+        void setHealth(int newHealth){ this->health = newHealth; }
         int getScore(){return score;}
+        //-----------------------------------------------------
+        bool getIsPoweredUp(){ return isPoweredUp; }
+        void setIsPoweredUp(bool nP){ this->isPoweredUp = nP; }
+        //-----------------------------------------------------
         void tick();
         void render();
         void keyPressed(int);
@@ -42,10 +50,5 @@ class Player: public Entity{
         void reset();
         void setFacing(FACING facing);
         void chaser();
-        int pacPosition();
         void checkCollisions();
-
-        //-----------
-        void setHealth(int newHealth){ this->health = newHealth; }
-        //-----------
 };

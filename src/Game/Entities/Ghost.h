@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include <cstdlib>
 #include <ctime>
+#include "Animation.h"
 
 enum DIRECTION {
     U,
@@ -19,19 +20,28 @@ enum color{
 };
 class Ghost: public Entity{
     private:
-        color ghostColor;
         int speed = 4;
         bool canMove;
+        bool isVulnerable = false;
+        ofImage ghostPic;
+        color ghostColor;
         EntityManager *em;
         DIRECTION position = U;
+        Animation* vulnerableState;
+        vector<ofImage> frames;
+        ofImage firstFrame;
+        ofImage secondFrame;
+
     public:
         Ghost(int, int, int, int, ofImage,EntityManager*);
         Ghost(int, int, int, int, ofImage, color,EntityManager*); //overloaded to accept a color indicator and entity manager
         int getSpeed(){ return this->speed;}
-        void setSpeed(int newSpeed){ this->speed = newSpeed;}
+        void setSpeed(int newSpeed){ this->speed = newSpeed; }
         color getColor(){ return ghostColor; }
+        void setIsVulnerable(bool newVulnerable){ this->isVulnerable = newVulnerable; }
+        bool getIsVulnerable(){ return this->isVulnerable; }
         void tick();
-        int pacPosition();
+        void render();
         void checkCollisions();
         void setDirection(DIRECTION nd){position = nd;}
 };
