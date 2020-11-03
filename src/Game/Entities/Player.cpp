@@ -193,7 +193,6 @@ void Player::keyPressed(int key)
 
     case 'g':
         ofImage newImage("images/Background.png");
-        srand(time(0));
         //pick a random color when spawning a ghost
         switch (rand() % 4 + 1)
         {

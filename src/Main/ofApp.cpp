@@ -12,9 +12,13 @@ void ofApp::setup(){
 	gameOverState = new GameOverState();
 	// Initial State
 	currentState = menuState;
+	//--------------------(music)----------------------
 	gameMusic.load("music/8_bit_flashback.mp3");
-	gameMusic.play();
+	gameOverMusic.load("music/game_over.mp3");
 	gameMusic.setLoop(true);
+	gameOverMusic.setLoop(true);
+	gameMusic.play();
+	//-------------------------------------------------
 }
 
 //--------------------------------------------------------------
@@ -30,12 +34,16 @@ void ofApp::update(){
 					currentState = gameState;
 				//else means we came from the GameOverState so we reset the map first
 				}else{
+					gameOverMusic.stop();
+					gameMusic.play();
 					gameState->resetMap();
 					currentState = gameState;
 				}
 			}
 			else if (currentState->getNextState() == "GameOver")
-			{
+			{	
+				gameMusic.stop();
+				gameOverMusic.play();
 				gameOverState->setMap(gameState->getMap());
 			 	currentState = gameOverState;
 			}
