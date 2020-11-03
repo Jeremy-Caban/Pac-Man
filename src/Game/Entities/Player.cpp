@@ -55,7 +55,7 @@ void Player::tick()
     canMove = true;
     checkCollisions();
     //after 500 ticks the ghosts will start chasing pacman
-    if(this->ticks >= 500 && this->ticks < 1000){
+    if(this->ticks >= 500 && this->ticks < 1000 && this->getIsPoweredUp() == false){
         int a = rand() % 5;
         if (a == 0)
         {
@@ -63,6 +63,14 @@ void Player::tick()
         }
     }else if( this->ticks >= 1000){
         this->ticks = 0;
+    }
+    //ghosts will run away if pacman is powered up
+    if(this->getIsPoweredUp() == true){
+        int a = rand() % 5;
+        if (a == 0)
+        {
+            runAway();
+        }
     }
     if (canMove)
     {
@@ -128,8 +136,11 @@ void Player::render()
     //Display score;
     ofDrawBitmapString("Score: " + to_string(score), 80, 70);
     //Display a message once the ghost start chasing you
-    if(this->ticks >= 500){
+    if(this->ticks >= 500 && this->getIsPoweredUp() == false){
         ofDrawBitmapString("The Ghosts are more inclined to chase you now...", 340, 30);
+    }
+    if(this->getIsPoweredUp() == true){
+        ofDrawBitmapString("The Ghosts are scared! Get them!", 340, 30);
     }
     if (facing == UP)
     {
@@ -255,7 +266,7 @@ void Player::chaser()
         //will only chase pacman after getting out of the box to prevent it from getting stuck
         if (c1 != nullptr && c1->getIsOutOfBox() ==  true){
             unsigned int s = rand() % 2;
-            if (s == 0 && this->getY() > c1->getY()){
+            if (s == 0 && this->getY() >= c1->getY()){
                 c1->setDirection(D);
             }else if(s == 0 && this->getY() < c1->getY()){
                 c1->setDirection(U);
@@ -267,6 +278,31 @@ void Player::chaser()
         }
     }
 }
+
+void Player::runAway()
+{
+    //same idea as chaser()
+    //makes ghost run away from pacman based on where the player is located
+    srand(time(0));
+    for (Entity *entity : em->entities)
+    {
+        Ghost *c1 = dynamic_cast<Ghost *>(entity);
+        //will run away from pacman once it gets out of the box
+        if (c1 != nullptr && c1->getIsOutOfBox() ==  true){
+            unsigned int s = rand() % 2;
+            if (s == 0 && this->getY() > c1->getY()){
+                c1->setDirection(U);
+            }else if(s == 1 && this->getY() < c1->getY()){
+                c1->setDirection(D);
+            }else if(s == 0 && this->getX() > c1->getX()){
+                c1->setDirection(L);
+            }else{
+                c1->setDirection(R);
+            }
+        }
+    }
+}
+
 void Player::checkCollisions()
 {
     for (Block *block : em->blocks)

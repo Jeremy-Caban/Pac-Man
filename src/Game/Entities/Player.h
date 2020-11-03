@@ -50,5 +50,6 @@ class Player: public Entity{
         void reset();
         void setFacing(FACING facing);
         void chaser();
+        void runAway();
         void checkCollisions();
 };
