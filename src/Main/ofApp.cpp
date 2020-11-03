@@ -14,9 +14,10 @@ void ofApp::setup(){
 	currentState = menuState;
 	//--------------------(music)----------------------
 	gameMusic.load("music/8_bit_flashback.mp3");
-	gameOverMusic.load("music/game_over.mp3");
+	gameOverMusic1.load("music/game_over_first_part.mp3");
+	gameOverMusic2.load("music/game_over_second_part.mp3");
 	gameMusic.setLoop(true);
-	gameOverMusic.setLoop(true);
+	gameOverMusic2.setLoop(true);
 	gameMusic.play();
 	//-------------------------------------------------
 }
@@ -34,7 +35,9 @@ void ofApp::update(){
 					currentState = gameState;
 				//else means we came from the GameOverState so we reset the map first
 				}else{
-					gameOverMusic.stop();
+					gameOverMusic1.stop();
+					gameOverMusic2.stop();
+					this->firstPartEnded = false;
 					gameMusic.play();
 					gameState->resetMap();
 					currentState = gameState;
@@ -43,7 +46,7 @@ void ofApp::update(){
 			else if (currentState->getNextState() == "GameOver")
 			{	
 				gameMusic.stop();
-				gameOverMusic.play();
+				gameOverMusic1.play();
 				gameOverState->setMap(gameState->getMap());
 			 	currentState = gameOverState;
 			}
@@ -51,7 +54,12 @@ void ofApp::update(){
 			currentState->reset();
 		}
 	}
-		
+	//play second part of the song after the first part is finished
+	//this is because the second part loops
+	if(currentState == gameOverState && gameOverMusic1.isPlaying() == false && this->firstPartEnded == false){
+		gameOverMusic2.play();
+		this->firstPartEnded = true;
+	}	
 }
 
 //--------------------------------------------------------------
@@ -59,8 +67,6 @@ void ofApp::draw(){
 	if (currentState != nullptr){
 		currentState->render();
 	}
-	//   ofSetColor(230);
-	//   ofDrawBitmapString("Lives: " + this->*health , 30, 20);
 }
 
 //--------------------------------------------------------------
