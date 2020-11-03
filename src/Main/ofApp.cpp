@@ -12,6 +12,9 @@ void ofApp::setup(){
 	gameOverState = new GameOverState();
 	// Initial State
 	currentState = menuState;
+	gameMusic.load("music/8_bit_flashback.mp3");
+	gameMusic.play();
+	gameMusic.setLoop(true);
 }
 
 //--------------------------------------------------------------
