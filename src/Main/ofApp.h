@@ -30,5 +30,7 @@ public:
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		ofSoundPlayer gameMusic;
-		ofSoundPlayer gameOverMusic;
+		ofSoundPlayer gameOverMusic1;
+		ofSoundPlayer gameOverMusic2;
+		bool firstPartEnded = false;
 };
