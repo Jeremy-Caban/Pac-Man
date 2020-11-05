@@ -31,6 +31,9 @@ class Player: public Entity{
         int startingYPos;
         bool isPoweredUp = false;
         int poweredUpTimer;
+        bool invincible = false;
+        ofImage pacGhost;
+        ofImage spritesheet;
     public:
         Player(int, int, int , int, EntityManager*);
         int getHealth(){return health;} //health getter

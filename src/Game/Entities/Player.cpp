@@ -9,6 +9,10 @@
 
 Player::Player(int x, int y, int width, int height, EntityManager *em) : Entity(x, y, width, height)
 {
+    //----------------------------
+    spritesheet.load("images/Background.png");
+    pacGhost.cropFrom(spritesheet,456,64,16,16);
+    //----------------------------
     sprite.load("images/pacman.png");
     down.cropFrom(sprite, 0, 48, 16, 16);
     up.cropFrom(sprite, 0, 32, 16, 16);
@@ -129,10 +133,11 @@ void Player::tick()
 
 void Player::render()
 {
-
     ofSetColor(256, 256, 256);
     //Display secret...
-    ofDrawBitmapString("You might see\nsomething cool\nif you press\n'B'...",80,100);
+    ofDrawBitmapString("You might see\nsomething cool\nif you press\n'b'...",80,100);
+    //Display secret #2...>_-
+    ofDrawBitmapString("\nPress 'i'\nfor disguise\n   >_<",80,150);
     //Display lives
     ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
     //Display score;
@@ -144,23 +149,31 @@ void Player::render()
     if(this->getIsPoweredUp() == true){
         ofDrawBitmapString("The Ghosts are scared! Get them!", 340, 30);
     }
-    if (facing == UP)
+    if (this->invincible == false)
     {
-        walkUp->getCurrentFrame().draw(x, y, width, height);
+        if (facing == UP)
+        {
+            walkUp->getCurrentFrame().draw(x, y, width, height);
+        }
+        else if (facing == DOWN)
+        {
+            walkDown->getCurrentFrame().draw(x, y, width, height);
+        }
+        else if (facing == LEFT)
+        {
+            walkLeft->getCurrentFrame().draw(x, y, width, height);
+        }
+        else if (facing == RIGHT)
+        {
+            walkRight->getCurrentFrame().draw(x, y, width, height);
+        }
     }
-    else if (facing == DOWN)
+    if (this->invincible == true)
     {
-        walkDown->getCurrentFrame().draw(x, y, width, height);
+        ofSetColor(255,255,0);
+        pacGhost.draw(x,y,width,height);
     }
-    else if (facing == LEFT)
-    {
-        walkLeft->getCurrentFrame().draw(x, y, width, height);
-    }
-    else if (facing == RIGHT)
-    {
-        walkRight->getCurrentFrame().draw(x, y, width, height);
-    }
-
+    
 }
 void Player::keyPressed(int key)
 {
@@ -201,15 +214,30 @@ void Player::keyPressed(int key)
             }
         }
         break;
+
+    case 'i':
+
+        if (this->invincible == false)
+        {
+            this->invincible = true;
+        }
+        else
+        {
+            this->invincible = false;
+        }
+        break;
     }
 }
 
 void Player::die()
 {
-    //reduce health by one and teleport to the start
-    this->health = this->health - 1;
-    this->x = this->startingXPos;
-    this->y = this->startingYPos;
+    if (this->invincible == false)
+    {
+        //reduce health by one and teleport to the start
+        this->health = this->health - 1;
+        this->x = this->startingXPos;
+        this->y = this->startingYPos;
+    }
 }
 
 void Player::keyReleased(int key)
@@ -221,8 +249,8 @@ void Player::keyReleased(int key)
 }
 void Player::mousePressed(int x, int y, int button)
 {
+    
 }
-
 void Player::setFacing(FACING facing)
 {
     this->facing = facing;
@@ -311,7 +339,7 @@ void Player::checkCollisions()
     {
         if (collides(entity))
         {
-            if (dynamic_cast<Dot*>(entity) || dynamic_cast<BigDot*>(entity))
+            if ((dynamic_cast<Dot*>(entity) || dynamic_cast<BigDot*>(entity)) && this->invincible == false)
             {
                 entity->remove = true;
                 //add to the score when player eats a dot
@@ -331,7 +359,7 @@ void Player::checkCollisions()
                 die();
                 break; //this should prevent a segmentation fault that occurs when eating more than one entity at the same time
             }
-            else if (dynamic_cast<Ghost*>(entity) && this->getIsPoweredUp() == true){
+            else if (dynamic_cast<Ghost*>(entity) && this->getIsPoweredUp() == true && this->invincible == false){
                 //save the ghosts color before removing
                 for(Entity* e: this->em->entities){
                     if(dynamic_cast<GhostSpawner*>(e)){
