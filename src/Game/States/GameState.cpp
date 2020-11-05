@@ -18,6 +18,11 @@ void GameState::render() {
 
 void GameState::keyPressed(int key){
 	map->keyPressed(key);
+	if(key == 'b'){
+		ofImage bonusMapImg;
+		bonusMapImg.load("images/Bonus.png");
+		map = MapBuilder().createMap(bonusMapImg);
+	}
 }
 
 void GameState::mousePressed(int x, int y, int button){

@@ -131,6 +131,8 @@ void Player::render()
 {
 
     ofSetColor(256, 256, 256);
+    //Display secret...
+    ofDrawBitmapString("You might see\nsomething cool\nif you press\n'B'...",80,100);
     //Display lives
     ofDrawBitmapString("Lives: " + to_string(health), 80, 50);
     //Display score;
