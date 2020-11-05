@@ -194,39 +194,10 @@ void Player::keyPressed(int key)
         break;
 
     case 'g':
-        ofImage newImage("images/Background.png");
-        //pick a random color when spawning a ghost
-        switch (rand() % 4 + 1)
-        {
-            case 1:
-            {
-                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, RED, this->em);
-                em->entities.push_back(newGhost);
-                break;
-            }
-            case 2:
-            {
-                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, PINK, this->em);
-                em->entities.push_back(newGhost);
-                break;
-            }
-            case 3:
-            {
-                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, CYAN, this->em);
-                em->entities.push_back(newGhost);
-                break;
-            }
-            case 4:
-            {
-                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, ORANGE, this->em);
-                em->entities.push_back(newGhost);
-                break;
-            }
-            default:
-            {
-                Entity *newGhost = new Ghost(504, 368, 16, 16, newImage, this->em);
-                em->entities.push_back(newGhost);
-                break;
+        //tells the ghostspawner to spawn a ghost of a random color
+        for(Entity* e : this->em->entities){
+            if(dynamic_cast<GhostSpawner*>(e)){
+                dynamic_cast<GhostSpawner*>(e)->keyPressed(key);
             }
         }
         break;

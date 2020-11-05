@@ -16,4 +16,5 @@ class GhostSpawner: public Entity{
         GhostSpawner(int, int, int, int, ofImage, EntityManager*);
         void addGhostToSpawn(color c){ toSpawnList.push_back(c); }
         void tick();
+        void keyPressed(int);
 };
