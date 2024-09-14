@@ -18,3 +18,6 @@ NOTE: game_over_first_part.mp3 and game_over_second_part.mp3 are both part of a 
 mentioned webstite which was then cut into two files and edited slightly for the purpose of the project. We take no credit in the 
 creation or publication of the images and music referenced here and all credit goes to their respective creator(s)
 whether named or not. 
+
+This project was made and ran on OpenFrameworks 0.11.0 for the ciic4020 (advanced programming) class and may not be compatible with future versions of
+OpenFrameworks. It is a functional recreation of pac-man given functionality by me, Jeremy and my partner Johncarlo.
